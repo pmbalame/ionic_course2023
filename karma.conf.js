@@ -1,9 +1,17 @@
+// @ts-nocheck
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
 module.exports = function (config) {
   config.set({
     basePath: '',
+    files:[
+      {pattern: 'src/asset/*.*', watched:false, included: false, served: true, nocache: false}
+    ],
+    proxies: {
+      '/bower_components/': config.root + '/client/bower_components/',
+      "test/dummy.png": "base/src/assets/favicon.png"
+    },
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
