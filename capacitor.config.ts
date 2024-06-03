@@ -6,7 +6,15 @@ const config: CapacitorConfig = {
   webDir: 'www',
   server: {
     androidScheme: 'https'
+  },
+  "plugins": {
+    "Camera": {
+      "sync": true
+    }
+
   }
+
 };
+
 
 export default config;

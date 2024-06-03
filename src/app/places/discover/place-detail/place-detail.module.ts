@@ -5,15 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { PlaceDetailPageRoutingModule } from './place-detail-routing.module';
-
 import { PlaceDetailPage } from './place-detail.page';
+import { ShareModule } from '../../../../app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PlaceDetailPageRoutingModule
+    PlaceDetailPageRoutingModule,
+    ShareModule
+
   ],
   declarations: [PlaceDetailPage]
 })

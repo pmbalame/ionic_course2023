@@ -11,6 +11,7 @@ import { IonItemSliding, LoadingController} from '@ionic/angular';
 })
 export class BookingsPage implements OnInit, OnDestroy {
   loadedBookings: Booking[] = [];
+  isLoading = false;
   private bookingSub: Subscription = new Subscription;
 
   constructor(private bookingService: BookingService, private loadingCtrl: LoadingController) { }
@@ -20,6 +21,12 @@ export class BookingsPage implements OnInit, OnDestroy {
     this.loadedBookings = bookings;
    });
     console.log(this.loadedBookings);
+  }
+  ionViewWillEnter(){
+    this.isLoading = true;
+    this.bookingService.fetchBookings().subscribe(() => {
+      this.isLoading = false;
+    });
   }
 
   onCancelBooking(bookingId: string, slidingEl: IonItemSliding){
@@ -32,6 +39,7 @@ export class BookingsPage implements OnInit, OnDestroy {
       });
     });
     // cancel booking with id offerID
+
 
   }
   ngOnDestroy(){

@@ -20,15 +20,23 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/favicon.ico",
+              "src/assets",
               {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+
               },
               {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/svg/",
+                "output": "/svg/"
               }
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
@@ -80,7 +88,7 @@
               "browserTarget": "app:build:development"
             },
             "ci": {
-              "progress": false
+              "watch": false
             }
           },
           "defaultConfiguration": "development"
@@ -100,6 +108,9 @@
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/assets/svg",
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -109,7 +120,7 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              }
+              },"src/svg/calendar.svg"
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
             "scripts": []

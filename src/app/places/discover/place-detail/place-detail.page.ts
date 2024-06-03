@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   NavController,
   ModalController,
   ActionSheetController,
-  LoadingController
+  LoadingController,
+  AlertButton,
+  AlertController
 } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -13,6 +15,7 @@ import { Place } from '../../place.model';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 import { BookingService } from '../../../bookings/booking.service';
 import { AuthService } from '../../../auth/auth.service';
+import { MapModalComponent } from '../../../../app/shared/map-modal/map-modal.component';
 
 @Component({
   selector: 'app-place-detail',
@@ -21,7 +24,8 @@ import { AuthService } from '../../../auth/auth.service';
 })
 export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place | any;
-  isBookeble = false;
+  isBookable = false;
+  isLoading = false;
   private placeSub: Subscription | any;
 
   constructor(
@@ -32,20 +36,36 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private actionSheetCtrl: ActionSheetController,
     private bookingService: BookingService,
     private loadingCtrl: LoadingController,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertCtrl: AlertController,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    console.log('ngOnInit called');
     this.route.paramMap.subscribe(paramMap => {
       if (!paramMap.has('placeId')) {
         this.navCtrl.navigateBack('/places/tabs/discover');
         return;
       }
+      this.isLoading = true;
       this.placeSub = this.placesService
         .getPlace(paramMap.get('placeId')|| '')
         .subscribe(place => {
           this.place = place;
-          this.isBookeble = place.userId !== this.authService.userId;
+          this.isBookable = place.userId !== this.authService.userId;
+          this.isLoading =false;
+
+        }, error => {
+          this.alertCtrl.create({
+            header: 'An error occurred!',
+            message: 'Could not load place.',
+            buttons:[{text: 'Okay', handler: ()=>{
+              this.router.navigate(['/places/tabs/discover'])
+            }
+          }
+        ]
+          }).then(alertEl => alertEl.present());
 
         });
     });
@@ -99,12 +119,13 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
             .create({ message: 'Booking place...' })
             .then(loadingEl => {
               loadingEl.present();
-              const data = resultData.data.bookingData;
+              const data = resultData.data;
+              console.log(resultData, this.place);
               this.bookingService
                 .addBooking(
                   this.place.id,
-                  this.place.title,
-                  this.place.imageUrl,
+                  this.place?.title,
+                  this.place?.imageUrl,
                   data?.firstName,
                   data?.lastName,
                   data?.guestNumber,
@@ -117,6 +138,17 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
             });
         }
       });
+  }
+  onShowFullMap(){
+    this.modalCtrl.create({component: MapModalComponent, componentProps:{
+      center:{lat: this.place.location.lat, lng: this.place.location.lng},
+      selectable: false,
+      closeButtonText: 'Close',
+      title: this.place.location.address
+
+    }}).then(modalEl => {
+      modalEl.present();
+    });
   }
 
   ngOnDestroy() {

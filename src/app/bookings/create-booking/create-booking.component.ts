@@ -10,6 +10,15 @@ import {NgForm} from '@angular/forms'
   styleUrls: ['./create-booking.component.scss']
 })
 export class CreateBookingComponent implements OnInit {
+
+  onDatetimeChange(event: Event) {
+    // Access the selected datetime through event.detail.value
+    console.log('Selected Date and Time:', event);
+
+    // If you want to store it in a variable
+    //this.selectedDate = event.detail.value;
+  }
+
   @Input() selectedPlace: Place| any;
   @Input() selectedMode: 'select'| 'random'  = 'select';
   @ViewChild('f', { static: true}) form: NgForm | any;
@@ -17,12 +26,17 @@ export class CreateBookingComponent implements OnInit {
   endDate: string | any;
   date: Date = new Date();
   Date: Date = new Date();
+  d1:any;
+  d2:any;
+
 
   constructor(private modalCtrl: ModalController) {
     const dateString = "2023-09-14T10:00:00Z"; // Sample date string in ISO format
     const date = new Date(dateString);
     this.startDate = date;
     this.endDate = date;
+
+
   }
 
   ngOnInit() {
@@ -62,7 +76,9 @@ export class CreateBookingComponent implements OnInit {
 
   onBookPlace() {
     if(!this.form.valid || !this.datesValid()){
-      return;
+      console.log(this.form.value)
+
+      return ;
     }
     this.modalCtrl.dismiss({
       firstName: this.form.value['first-name'],
@@ -72,6 +88,7 @@ export class CreateBookingComponent implements OnInit {
       startDate: new Date(this.form.value['date-from']),
       endDate: new Date (this.form.value['date-to'])
      }, 'confirm');
+
   }
   datesValid(){
     const startDate = new Date(this.form.value['date-from']);
