@@ -25,6 +25,7 @@ exports.storeImage = functions.https.onRequest((req, res) => {
       const filePath = path.join(os.tmpdir(), filename);
       uploadData = { filePath: filePath, type: mimetype, name: filename };
       file.pipe(fs.createWriteStream(filePath));
+      file.on('end', ()=> console.log('file upload compleated'));
     });
 
     busboy.on('field', (fieldname, value) => {

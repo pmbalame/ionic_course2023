@@ -2,7 +2,7 @@ import { PlaceLocation } from "./location.model";
 
 export class Place {
   constructor(
-    public id: string | any,
+    public id: string | never,
     public title: string,
     public description: string,
     public imageUrl: string,

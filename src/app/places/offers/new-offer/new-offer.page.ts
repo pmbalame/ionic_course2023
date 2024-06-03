@@ -107,7 +107,7 @@ export class NewOfferPage implements OnInit {
     .then(loadingEl =>{
       loadingEl.present();
       this.placeService
-      .uploadImage(this.form.get('image'))
+      .uploadImage(this.form.get('image').value)
       .pipe(
         switchMap(uploadRes  => {
         return this.placeService.addPlace(
