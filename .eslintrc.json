@@ -10,7 +10,9 @@
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:@typescript-eslint/recommended", // Added for improved TypeScript linting
+        "eslint:recommended" // General ESLint recommendations
       ],
       "rules": {
         "@angular-eslint/component-class-suffix": [
@@ -34,13 +36,36 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ]
+        ],
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }], // Enforce no unused variables except those prefixed with an underscore
+        "@typescript-eslint/no-explicit-any": "warn", // Warn against usage of the `any` type
+        "no-console": ["warn", { "allow": ["warn", "error"] }] // Allow console.warn and console.error, but warn against other console methods
       }
     },
     {
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
+    },
+    {
+      "files": ["*.js"], // Targeting JavaScript files, typically for node environment
+      "env": {
+        "node": true, // Set environment to node for global variables like process, etc.
+        "es2021": true // Ensures compatibility with ES2021 features
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:node/recommended" // Ensures Node.js best practices
+      ],
+      "rules": {
+        "node/no-unpublished-require": "off", // This might be necessary if you have locally required files that aren't published
+        "node/no-missing-require": ["error", {
+          "allowModules": [], // Specify any modules that you might use that ESLint can't find
+          "resolvePaths": ["/path/to/your/modules/"], // Specify a path array if your modules are not in the default path
+          "tryExtensions": [".js", ".json", ".node", ".ts"] // Try these extensions in this order
+        }],
+        "node/callback-return": "warn" // Warn if callback pattern is not followed
+      }
     }
   ]
 }
