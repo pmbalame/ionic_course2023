@@ -10,69 +10,87 @@
 </ion-header>
 <ion-content class="ion-text-center"padding>
 
- <form  (ngSubmit)="onBookPlace()" #f="ngForm">
-  <ion-grid>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
-        <ion-label position="floating">First Name</ion-label>
-        <ion-input type="text" ngModel name="first-name" required></ion-input>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
-        <ion-label position="floating" >Last Name</ion-label>
-        <ion-input type="text" ngModel name="last-name" required></ion-input>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
-        <ion-label position="floating">ID Number</ion-label>
-        <ion-input type="text" ngModel name="id-number" required></ion-input>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
-        <ion-item>
-        <ion-label position="floating" >Number of Guests</ion-label>
-        <ion-select [ngModel]="'2'" name="guest-number" required >
-        <ion-select-option value="1">1</ion-select-option>
-        <ion-select-option value="2">2</ion-select-option>
-        <ion-select-option value="3">3</ion-select-option>
-      </ion-select>
-      </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="3" offset-sm="3">
-        <ion-item>
-        <ion-label  position="floating">From </ion-label>
-        <ion-datetime-button   datetime="datetimeFrom"></ion-datetime-button>
-        <ion-modal [keepContentsMounted]="true">
-          <ng-template>
-            <ion-datetime id="datetimeFrom"  [(ngModel)]="d1" name="date-from"></ion-datetime>
-          </ng-template>
-        </ion-modal>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="3" offset-sm="3">
-        <ion-item >
-        <ion-label  position="floating">To</ion-label>
-        <ion-datetime-button  datetime="datetimeTo"></ion-datetime-button>
-        <ion-modal [keepContentsMounted]="true">
-          <ng-template>
-            <ion-datetime id="datetimeTo"  [(ngModel)]="d2" name="date-to"></ion-datetime>
-          </ng-template>
-        </ion-modal>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
-        <ion-button type="submit" color="primary" expand="block" [disabled]="!f.valid ">Book!</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
- </form>
+  <form (ngSubmit)="onBookPlace()" #f="ngForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-label position="floating">First Name</ion-label>
+          <ion-input type="text" ngModel name="firstName" required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-label position="floating">Last Name</ion-label>
+          <ion-input type="text" ngModel name="lastName" required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-label position="floating">ID Number</ion-label>
+          <ion-input type="text" ngModel name="idNumber" required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">Number of Guests</ion-label>
+            <ion-select [(ngModel)]="guestNumber" name="guestNumber" required>
+              <ion-select-option value="1">1</ion-select-option>
+              <ion-select-option value="2">2</ion-select-option>
+              <ion-select-option value="3">3</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="3" offset-sm="3">
+          <!-- FROM DATE -->
+          <ion-item>
+            <ion-text color="medium">From</ion-text>
+            <ion-datetime-button datetime="datetimeFrom"></ion-datetime-button>
+          </ion-item>
+
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="datetimeFrom"
+                [(ngModel)]="d1"
+                presentation = date
+                name="dateFrom"
+                (ionCancel)="closeCalendar()"
+                (ionConfirm)="onDateSelected($event, 'd1')">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="3" offset-sm="3">
+          <!-- TO DATE -->
+          <ion-item>
+            <ion-text color="medium">To</ion-text>
+            <ion-datetime-button datetime="datetimeTo"></ion-datetime-button>
+          </ion-item>
+
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="datetimeTo"
+                [(ngModel)]="d2"
+                presentation = date
+                name="dateTo"
+                (ionCancel)="closeCalendar()"
+                (ionConfirm)="onDateSelected($event, 'd2')">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-button type="submit" color="primary" expand="block" [disabled]="!f.valid">Book!</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

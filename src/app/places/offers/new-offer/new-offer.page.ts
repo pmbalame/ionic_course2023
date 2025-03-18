@@ -33,7 +33,7 @@ function base64toBlob(base64Data: any, contentType: any) {
   selector: 'app-new-offer',
   templateUrl: './new-offer.page.html',
   styleUrls: ['./new-offer.page.scss'],
-})
+})  
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class NewOfferPage implements OnInit {
   form: FormGroup | any;

@@ -103,17 +103,21 @@ export class PlacesService {
     return this.authService.token.pipe(
       take(1),
       switchMap(token => {
+        console.log("Using token:", token); // Debugging
       return this.http
         .get<PlaceData>(
-          `https://ioniccourse2023-default-rtdb.firebaseio.com/offered-places/${id}.json?aunth=${token}`
+          `https://ioniccourse2023-default-rtdb.firebaseio.com/offered-places/${id}.json?auth=${token}`
         )
     }),
         map(placeData => {
+          if (!placeData) {
+            throw new Error("No place data found!");
+          }
           return new Place(
             id,
-            placeData.title,
-            placeData.description,
-            placeData.imageUrl,
+            placeData?.title,
+            placeData?.description,
+            placeData?.imageUrl,
             placeData.price,
             new Date(placeData.availableFrom),
             new Date(placeData.availableTo),
@@ -134,7 +138,8 @@ export class PlacesService {
         'https://us-central1-ioniccourse2023.cloudfunctions.net/storeImage',
         uploadData, {headers: {Authorization: 'Bearer'+ token}}
       );
-    }))
+    })
+  );
 
   }
 

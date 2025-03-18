@@ -42,7 +42,7 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  ngOnInit() {
+ /* ngOnInit() {
     console.log('ngOnInit called');
     this.route.paramMap.subscribe(paramMap => {
       if (!paramMap.has('placeId')) {
@@ -81,6 +81,60 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         });
     });
   }
+    */
+
+  ngOnInit() {
+    console.log('ngOnInit called');
+
+    this.route.paramMap.subscribe(paramMap => {
+      if (!paramMap.has('placeId')) {
+        this.navCtrl.navigateBack('/places/tabs/discover');
+        return;
+      }
+
+      this.isLoading = true; // ✅ Start loading spinner
+      let fetchedUserId: string;
+      const placeId = paramMap.get('placeId') || '';
+
+      this.authService.userId
+        .pipe(
+          take(1),
+          switchMap(userId => {
+            if (!userId) {
+              throw new Error('Found no user!');
+            }
+            fetchedUserId = userId;
+            return this.placesService.getPlace(placeId);
+          })
+        )
+        .subscribe(
+          place => {
+            this.place = place;
+            this.isBookable = place.userId !== fetchedUserId;
+            this.isLoading = false; // ✅ Stop loading spinner
+          },
+          error => {
+            console.error('Error fetching place:', error); // ✅ Log error for debugging
+            this.isLoading = false; // ✅ Stop loading spinner on error
+            this.alertCtrl
+              .create({
+                header: 'An error occurred!',
+                message: 'Could not load place. Please try again later.',
+                buttons: [
+                  {
+                    text: 'Okay',
+                    handler: () => {
+                      this.router.navigate(['/places/tabs/discover']);
+                    }
+                  }
+                ]
+              })
+              .then(alertEl => alertEl.present());
+          }
+        );
+    });
+  }
+
 
   onBookPlace() {
     // this.router.navigateByUrl('/places/tabs/discover');

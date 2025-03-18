@@ -50,7 +50,7 @@ export class CreateBookingService {
         endDate
         );
         return this.http
-        .post<{name: string}>('https://ioniccourse2023-default-rtdb.firebaseio.com/createbooking.json',
+        .post<{name: string}>(`https://ioniccourse2023-default-rtdb.firebaseio.com/createbooking.json?auth=${token}`,
          {...newCreateBooking, id: null}
          ).pipe(switchMap(resData => {
             generatedId = resData.name;
